@@ -100,3 +100,7 @@ git clone https://github.com/<owner>/fleet-protocol.git .claude/skills/fleet-pro
 - [npryce/adr-tools](https://github.com/npryce/adr-tools)：决策取代的双向链接
 - [Google Engineering Practices](https://google.github.io/eng-practices/)：代码审查速度与小改动
 - [DORA](https://dora.dev/)：小批量、快速合并与变更失败恢复
+
+## 许可证
+
+MIT License © 2026 Lyvarx，见 [LICENSE](LICENSE)。
