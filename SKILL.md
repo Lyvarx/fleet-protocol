@@ -1,8 +1,8 @@
 ---
 name: fleet-protocol
-description: 规定一名人类负责人（Owner）、一名主管 Agent（Lead）与多名执行 Agent、审查 Agent 协作完成软件项目的工程规程，涵盖角色与权限、任务书、开工规程、测试先行与证据、一审与二审、合并门、规则预授权合并、在制品上限、决策记录、调研、设计交付与交接。在规划多 Agent 分工、编写或转达任务书、审查与合并 PR、登记决策、组织调研、交付设计稿或交接主管职责时加载。Defines an engineering protocol for one human Owner, one Lead agent and several implementer and reviewer agents working on a software repository; load it when planning agent work, writing task briefs, reviewing or merging pull requests, recording decisions, or handing over the Lead role.
+description: 规定一名人类负责人（Owner）、一名主管 Agent（Lead）与多名执行 Agent、审查 Agent 协作完成软件项目的工程规程，涵盖角色与权限、任务书、开工规程、测试先行与证据、一审与二审、合并门、规则预授权合并、在制品上限、决策记录、调研、设计交付与交接。在规划多 Agent 分工、编写或转达任务书、审查与合并 PR、登记决策、组织调研、交付设计稿或交接主管职责时加载。自带 scripts/ 闸门脚本（提问闸、提问留痕、状态快照）。Defines an engineering protocol for one human Owner, one Lead agent and several implementer and reviewer agents working on a software repository; load it when planning agent work, writing task briefs, reviewing or merging pull requests, recording decisions, or handing over the Lead role.
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
   language: zh-CN
 ---
 
@@ -35,7 +35,7 @@ metadata:
 
 ## 2. 基本原则
 
-1. **仓库是唯一事实源。** 结论、决策、规格、任务书与交接必须落入仓库或其 Issue；聊天记录不作依据。
+1. **仓库是唯一事实源。** 结论、决策、规格、任务书与交接必须落入仓库或其 Issue；聊天记录不作依据。主管向负责人提的问题与负责人的答复同样必须落入决策公告板（§4 第 6、7 条），不得只留在聊天里。
 2. **通信经负责人转达。** 执行 Agent 与审查 Agent 不主动读取消息，也不会自行开工。主管发往它们的任何内容，必须同时给出可直接转发的转达文本（`templates/relay-message.md`）。
 3. **一次只问一个问题。** 主管向负责人提问时附建议、证据与可一词回答的选项。
 4. **先调研，再决策。** 算法、公式、阈值、口径、交互结构与视觉元素不得凭直觉决定。
@@ -65,6 +65,8 @@ metadata:
 3. 负责人每作出一项决定，主管当轮必须完成：分配决策编号 `D-YYYYMMDD-NN`；在决策公告板发布条目；在受影响的 PR 下知会。
 4. 被取代的决策不得删除，必须标注「被 D-xxx 取代」，新条目写明「取代 D-yyy」。
 5. 技术事项（CI 排队、合并顺序、草稿状态等）由主管自行决定，汇报时逐项写「决定｜理由｜依据」，负责人可推翻。
+6. **提问闸。** 产品或技术方案问负责人之前，调研文件必须含「## 同类对标」节并通过 `scripts/ask-check.sh`（≥2 条一手链接、≥1 条同市场先例、反例、对标行、无禁用表述）；再用 `scripts/ask-post.sh` 把问题原文与调研全文发到决策公告板，拿到评论链接后才可提问。FAIL 或无链接不得提问。审查 Agent 的调研回报同样过此闸。
+7. 决策条目写明「问题：<提问评论链接>」与「负责人原话（时间）」。
 
 细则：`references/decisions-and-records.md`、`references/research.md`。
 
@@ -114,7 +116,8 @@ metadata:
 6. 更换承担某角色的账号时，沿用原角色名，不另起称呼。
 7. 能确定计算的监看交给不调用模型的脚本（例如仓库定时 workflow），只识别三类信号：交付回报、阻塞、超时无动静；同一警报只报一次。只有待审成果、需拍板事项、真正卡死、不可撤操作、需登录时，才唤醒主管或负责人。不得用模型定时轮询。
 8. 负责人离场期间，主管只处理无需拍板的事项；需拍板的写入待定清单（事项｜影响｜建议｜提出日期｜推迟至），不得夜间打扰。负责人说「以后再说」时登记推迟日期，到期再提。
-9. 负责人回场后，主管先用脚本生成状态快照（等待拍板｜刚落地｜进行中｜卡住｜推迟中），再按影响从大到小一次只问一件，并附建议。
+9. 负责人回场后、以及每次提问前，主管先跑 `scripts/snapshot.sh` 生成状态快照（等待拍板｜刚落地｜进行中｜卡住｜推迟中｜暂停或并入），被暂停或并入别项的不得单独问；再按影响从大到小一次只问一件，并附建议。
+10. 负责人的每条要求、暂停与待定事项，当轮写入待定清单并同步到公告板，不靠主管记忆。
 
 细则：`references/lead-handbook.md`。
 
@@ -137,6 +140,9 @@ metadata:
 | `templates/decision-entry.md` | 决策公告板条目 |
 | `templates/handoff.md` | 交接文档 |
 | `templates/relay-message.md` | 主管给负责人的转达文本 |
+| `scripts/ask-check.sh` | 提问闸（§4 第 6 条） |
+| `scripts/ask-post.sh` | 提问留痕到公告板（§4 第 6 条） |
+| `scripts/snapshot.sh` | 状态快照（§8 第 9 条） |
 
 ## 10. 适用边界
 

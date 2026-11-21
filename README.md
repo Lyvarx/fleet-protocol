@@ -20,7 +20,8 @@
 - 一审、二审、八项合并门、规则预授权合并、合入后验证与回退、在制品上限、叠栈；
 - 决策编号、决策公告板（MADR 精简字段）、取代链、台账与交接；
 - 调研的来源标准、双来源与反证检索；
-- 设计待定清单、token 一致性、图标许可与交付前验图。
+- 设计待定清单、token 一致性、图标许可与交付前验图；
+- 随附闸门脚本（`scripts/`）：提问闸、提问留痕、状态快照，加载 skill 即可直接运行。
 
 ## 适用场景
 
@@ -36,6 +37,7 @@
 ```
 fleet-protocol/
 ├── SKILL.md                         核心流程与索引（带 YAML frontmatter）
+├── scripts/                         闸门脚本：ask-check.sh、ask-post.sh、snapshot.sh
 ├── references/
 │   ├── glossary.md                  术语表、英文对照、别名与规范用语
 │   ├── roles.md                     角色定义、权限矩阵与通信边界
