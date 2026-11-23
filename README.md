@@ -83,7 +83,7 @@ git clone https://github.com/<owner>/fleet-protocol.git .claude/skills/fleet-pro
 
 ## 版本
 
-当前版本：3.1.0。版本号遵循语义化版本：
+当前版本：3.3.0。版本号遵循语义化版本：
 
 - 主版本：结构或角色定义发生不兼容变化；
 - 次版本：新增规则或模板；
